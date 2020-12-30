@@ -16,5 +16,3 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'PostController@index')->name('home');
-
-Route::resource('postagem',"PostController");
