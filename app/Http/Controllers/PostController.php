@@ -14,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::with('comentarios')->get();
         return view('home', compact('posts'));
     }
 
@@ -27,6 +27,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(["titulo"=>"required","conteudo"=>"required"]);
         $post = Post::create($request->all());
         return json_encode($post);
     }

@@ -1,12 +1,12 @@
 <template>
     <div>
-        <form-post v-if="authenticated" class="mb-3" v-on:create="createPost"></form-post>
+        <form-post v-if="authenticated" class="mb-3" v-on:postCreated="postCreated"></form-post>
         <div>
             <div class="row">
                 <post v-for="(post,index) in posts" v-bind:dados="post" v-bind:authenticated="authenticated"
                       v-bind:key="index"/>
             </div>
-            <div class="alert alert-secondary" v-if="posts.length === 0">Sem Comentários</div>
+            <div class="alert alert-secondary" v-if="posts.length === 0">Sem postagens</div>
         </div>
     </div>
 </template>
@@ -27,8 +27,8 @@
             Post
         },
         methods: {
-            createPost(){
-
+            postCreated(post){
+                this.posts.push(post)
             }
         }
     }
