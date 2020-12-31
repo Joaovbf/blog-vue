@@ -24,8 +24,6 @@
 </template>
 
 <script>
-    import formRequest from "../utils/formRequest"
-
     export default {
         name: 'form-post',
         data(){
@@ -33,17 +31,12 @@
                 token: document.head.querySelector("[name='csrf-token']").content,
                 titulo: '',
                 conteudo: '',
-                mensagem: { contexto: "success", conteudo: [] }
+                mensagem: { contexto: "", conteudo: [] }
             })
         },
         methods:{
             novoPost(event) {
                 const form = event.target
-                formRequest(new FormData(form),form.action,form.method, (ok,corpo) => {
-                    if (ok){
-
-                    }
-                })
             },
             excluirMensagem(){
                 this.mensagem = {
