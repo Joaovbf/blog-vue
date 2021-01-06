@@ -5,8 +5,7 @@
     <div class="card">
         <div class="card-header">Postagens</div>
         <div id="blog" class="card-body">
-            <blog v-bind:authenticated="true"
-                  v-bind:initialposts="{{ json_encode($posts) }}"></blog>
+            <blog></blog>
         </div>
     </div>
 </div>

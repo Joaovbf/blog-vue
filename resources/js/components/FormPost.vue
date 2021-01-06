@@ -9,7 +9,6 @@
             </ul>
         </div>
         <form v-on:submit.prevent="novoPost" :action="route('postagem.store')" method="post">
-            <input type="hidden" name="_token" v-model="token">
             <div class="form-group">
                 <label for="titulo">Titulo</label>
                 <input v-model="titulo" class="form-control" type="text" id="titulo" name="titulo">
@@ -28,7 +27,6 @@
         name: 'form-post',
         data(){
             return({
-                token: document.head.querySelector("[name='csrf-token']").content,
                 titulo: '',
                 conteudo: '',
                 mensagem: { contexto: "", conteudo: [] }
@@ -37,6 +35,26 @@
         methods:{
             novoPost(event) {
                 const form = event.target
+
+                axios.post(form.action,{
+                    titulo: this.titulo,
+                    conteudo: this.conteudo,
+                }).then(resposta => {
+
+                    this.$emit("postCreated",resposta.data)
+
+                    this.mensagem.contexto = "success"
+                    this.mensagem.conteudo.push("Postagem cadastrada com sucesso")
+
+                    this.titulo = ""
+                    this.conteudo = ""
+                }, reason => {
+                    this.mensagem.contexto = "danger"
+                    let errors = reason.response.data.errors
+                    for(let key in errors)
+                        this.mensagem.conteudo.push(errors[key].shift())
+                })
+
             },
             excluirMensagem(){
                 this.mensagem = {
