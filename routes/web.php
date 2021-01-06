@@ -15,4 +15,12 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', 'PostController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
+
+Route::get('usuario/logado',function (){
+    return json_encode(Auth::user());
+})->name("usuario.logado");
+
+Route::apiResource('postagem',"PostController");
+
+Route::apiResource('comentario',"ComentarioController");

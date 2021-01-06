@@ -7,6 +7,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import store from "./vuex/index"
 
 // ferramenta para usar as rotas do laravel no vue
 import route from 'ziggy';
@@ -36,4 +37,5 @@ Vue.component('blog', require('./components/Blog.vue').default);
 
 const blog = new Vue({
     el: '#blog',
+    store
 })

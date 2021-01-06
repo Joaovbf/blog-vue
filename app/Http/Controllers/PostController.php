@@ -4,18 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function index()
     {
-        $posts = Post::with('comentarios')->get();
-        return view('home', compact('posts'));
+        $posts = Post::all();
+        return $posts->toJson();
     }
 
 
@@ -27,8 +29,17 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check())
+            return response(["errors" => "Você não está autenticado"],Response::HTTP_UNAUTHORIZED);
+
         $request->validate(["titulo"=>"required","conteudo"=>"required"]);
-        $post = Post::create($request->all());
+        $data = $request->all();
+        $data["user_id"] = Auth::id();
+
+        $post = Post::create($data);
+
+        $post->load('comentarios');
+
         return json_encode($post);
     }
 
@@ -40,6 +51,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post->load(["autor","comentarios"]);
         return json_encode($post);
     }
 

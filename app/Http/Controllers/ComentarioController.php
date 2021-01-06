@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comentario;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ComentarioController extends Controller
 {
@@ -35,7 +36,19 @@ class ComentarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if (!Auth::check())
+            return response(["errors" => "Você não está autenticado"],Response::HTTP_UNAUTHORIZED);
+
+        $request->validate(["conteudo"=>"required"]);
+
+        $data = $request->all();
+        $data['user_id'] = Auth::id();
+
+        $comentario = Comentario::create($data);
+
+        $comentario->load('autor');
+
+        return json_encode($comentario);
     }
 
     /**
